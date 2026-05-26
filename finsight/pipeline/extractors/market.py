@@ -1,8 +1,16 @@
 import pandas as pd
 from datetime import date, timedelta
 from pydantic import BaseModel, field_validator
-from vnstock3 import Vnstock
+from vnstock import Vnstock
 from .base import BaseExtractor
+
+try:
+    # vnstock new API (recommended)
+    from vnstock.api.quote import Quote
+except Exception:
+    Quote = None
+    # Backward-compatible fallback for older envs
+    from vnstock import Vnstock
 
 VN_BANK_TICKERS = {
     "VCB": "Vietcombank",
@@ -54,8 +62,12 @@ class MarketExtractor(BaseExtractor):
 
         for ticker, bank_name in VN_BANK_TICKERS.items():
             try:
-                stock = Vnstock().stock(symbol=ticker, source="VCI")
-                hist  = stock.quote.history(start=start, end=end, interval="1D")
+                if Quote is not None:
+                    quote = Quote(symbol=ticker, source="VCI")
+                    hist = quote.history(start=start, end=end, interval="1D")
+                else:
+                    stock = Vnstock().stock(symbol=ticker, source="VCI")
+                    hist = stock.quote.history(start=start, end=end, interval="1D")
 
                 for _, row in hist.iterrows():
                     records.append({

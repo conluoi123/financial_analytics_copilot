@@ -31,9 +31,10 @@ class WorldBankExtractor(BaseExtractor):
             )
             try:
                 data = requests.get(url, timeout=10).json()
-                for entry in (data[1] or []):
-                    if entry["value"] is not None:
-                        records.append({
+                if len(data) > 1 and isinstance(data[1], list):
+                    for entry in data[1]:
+                        if entry["value"] is not None:
+                            records.append({
                             "indicator_code": code,
                             "indicator_name": name,
                             "year":           int(entry["date"]),

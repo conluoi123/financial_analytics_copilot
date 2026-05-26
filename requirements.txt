@@ -1,10 +1,11 @@
-﻿pandas>=2.2,<3
+pandas>=2.2,<3
 pydantic>=2.8,<3
 requests>=2.32,<3
 python-dotenv>=1.0,<2
 
 # Data ingestion / storage
-vnstock3>=3.2.0
+vnstock
+squarify>=4.0.0
 pyarrow>=16,<20
 deltalake>=0.18,<0.20
 duckdb>=1.0,<2
