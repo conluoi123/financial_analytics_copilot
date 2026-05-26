@@ -1,0 +1,30 @@
+# Environments
+venv/
+env/
+.env
+__pycache__/
+*.pyc
+
+# Data & Databases (Bảo mật: Không bao giờ push data thực tế hay db lên Git)
+data/
+*.duckdb
+*.db
+*.sqlite
+
+# dbt
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+
+# Dagster & MLflow
+.dagster/
+mlruns/
+
+# Frontend (Next.js)
+frontend/node_modules/
+frontend/.next/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store

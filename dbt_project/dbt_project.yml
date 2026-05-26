@@ -1,0 +1,13 @@
+name: finsight
+version: "1.0.0"
+profile: finsight
+
+model-paths: ["models"]
+test-paths:  ["tests"]
+
+models:
+  finsight:
+    staging:
+      +materialized: view       # Silver là views — lazy evaluation
+    marts:
+      +materialized: table      # Gold là tables — pre-computed

@@ -1,0 +1,12 @@
+version: 2
+sources:
+  - name: bronze
+    schema: main
+    description: "Delta Lake tables exposed via DuckDB delta extension"
+    tables:
+      - name: vn_stocks
+        description: "Daily OHLCV từ vnstock — VCB BID CTG MBB TCB"
+      - name: vn_financials
+        description: "Quarterly financial ratios từ vnstock — NIM NPL CAR CASA"
+      - name: world_bank
+        description: "Annual macro indicators từ World Bank API"

@@ -1,0 +1,36 @@
+﻿pandas>=2.2,<3
+pydantic>=2.8,<3
+requests>=2.32,<3
+python-dotenv>=1.0,<2
+
+# Data ingestion / storage
+vnstock3>=3.2.0
+pyarrow>=16,<20
+deltalake>=0.18,<0.20
+duckdb>=1.0,<2
+
+# Transform / data quality
+dbt-duckdb>=1.8,<1.10
+great_expectations>=1.2,<2
+
+# Orchestration (pin modern Dagster to avoid old grpcio backtracking)
+dagster==1.11.16
+dagster-webserver==1.11.16
+dagster-dbt==0.27.16
+
+# ML
+scikit-learn>=1.5,<2
+torch>=2.3,<3
+prophet>=1.1.6,<2
+mlflow>=2.16,<3
+
+# API / Agent
+fastapi>=0.112,<1
+uvicorn[standard]>=0.30,<1
+langgraph>=0.2,<0.4
+langchain-core>=0.3,<0.4
+langchain-community>=0.3,<0.4
+
+# Auth
+PyJWT>=2.9,<3
+python-jose[cryptography]>=3.3,<4
