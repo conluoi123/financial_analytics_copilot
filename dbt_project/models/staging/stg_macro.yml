@@ -1,0 +1,20 @@
+version: 2
+models:
+  - name: stg_macro
+    description: "Annual macro indicators — World Bank API for Vietnam"
+    columns:
+      - name: report_year
+        tests:
+          - not_null
+          - unique
+          # Sau PIVOT, mỗi năm chỉ còn 1 row — unique test đủ rồi
+
+      - name: inflation_pct
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "IS NULL OR (inflation_pct > -10 AND inflation_pct < 100)"
+
+      - name: gdp_growth_pct
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "IS NULL OR (gdp_growth_pct > -20 AND gdp_growth_pct < 20)"

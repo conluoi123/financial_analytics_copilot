@@ -1,0 +1,24 @@
+version: 2
+models:
+  - name: stg_financials
+    description: "Quarterly financial ratios — VN banks from vnstock"
+    columns:
+      - name: ticker
+        tests:
+          - not_null
+
+      - name: period
+        tests:
+          - not_null
+          # "2024-Q1" — không unique một mình vì 5 ticker × N quý
+
+      - name: npl_ratio_pct
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "IS NULL OR (npl_ratio_pct >= 0 AND npl_ratio_pct <= 30)"
+              # IS NULL cho phép — VCI không phải lúc nào cũng cấp đủ
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: ["ticker", "period"]
+          # (VCB, 2024-Q1) chỉ được xuất hiện 1 lần

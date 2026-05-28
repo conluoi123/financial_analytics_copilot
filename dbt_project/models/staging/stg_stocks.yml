@@ -1,0 +1,35 @@
+version: 2
+models:
+  - name: stg_stocks
+    description: "Cleaned daily stock prices — VN banks"
+    columns:
+      - name: trade_date
+        tests:
+          # test ở đây là test cho các cột
+          - not_null
+          # Nếu trade_date NULL thì JOIN với financials sẽ sai hoàn toàn
+
+      - name: ticker
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["VCB", "BID", "CTG", "MBB", "TCB"]
+              # Nếu có ticker lạ lọt vào → data contamination
+
+      - name: close_price
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+
+      - name: volume
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+
+    # Composite unique test — mỗi (ngày, ticker) chỉ có 1 row sau dedup
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: ["trade_date", "ticker"]
+
+# Cái tests ngang cấp models là test cho toàn bảng

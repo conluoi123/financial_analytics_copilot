@@ -1,3 +1,6 @@
+-- 
+
+
 WITH source AS (
     SELECT * FROM {{ source('bronze', 'world_bank') }}
 ),
@@ -5,7 +8,12 @@ WITH source AS (
 -- Pivot từ long format (indicator_name, value) sang wide format (1 row per year)
 pivoted AS (
     PIVOT source
-    ON indicator_name
+    ON indicator_name IN (
+        'inflation_pct',
+        'lending_rate_pct', 
+        'gdp_growth_pct',
+        'npl_to_gdp_pct'
+    )
     USING FIRST(value)
     GROUP BY year
 ),
