@@ -2,26 +2,7 @@ import { useState } from 'react';
 import { Send, Plus, Sparkles } from 'lucide-react';
 import type { ChatMessage, DataLayer } from '../types';
 
-const initialMessages: ChatMessage[] = [
-  {
-    id: '1',
-    role: 'assistant',
-    content: "Hello! I've analyzed the latest quarterly movements across your linked accounts. I've detected a significant anomaly in **BID's Non-Performing Loan (NPL)** ratio which jumped by 1.2% last week.\n\nWould you like me to generate a risk projection based on current market volatility?",
-    timestamp: '09:41 AM',
-  },
-  {
-    id: '2',
-    role: 'user',
-    content: 'Yes, please. Also show me how that compares to VCB and CTG for the same period.',
-    timestamp: '09:42 AM',
-  },
-  {
-    id: '3',
-    role: 'assistant',
-    content: "I've compiled the comparative NPL analysis. BID shows the highest volatility, while VCB remains relatively stable.\n\n| Bank | NPL % | QoQ Δ |\n|------|-------|-------|\n| VCB  | 1.12% | +0.05%|\n| BID  | 2.45% | +1.20%|\n| CTG  | 1.88% | +0.12%|\n\nFor your proprietary risk model, you can use this anomalies here.",
-    timestamp: '09:43 AM',
-  },
-];
+const initialMessages: ChatMessage[] = [];
 
 const suggestedQueries = [
   'Which bank has the highest NPL risk currently?',
@@ -44,9 +25,10 @@ const tabs = [
 export function AIInsights() {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const handleSend = async () => {
+    if (!input.trim() || isTyping) return;
 
     const newMessage: ChatMessage = {
       id: Date.now().toString(),
@@ -59,15 +41,29 @@ export function AIInsights() {
       }),
     };
 
-    setMessages([...messages, newMessage]);
+    setMessages(prev => [...prev, newMessage]);
     setInput('');
+    setIsTyping(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: input }),
+      });
+
+      if (!response.ok) {
+        throw new Error('API Error');
+      }
+
+      const data = await response.json();
+      
       const aiResponse: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: "I'm analyzing your request. This is a simulated response. In a real implementation, this would connect to an AI model to provide intelligent insights based on your financial data.",
+        content: data.error ? `Error: ${data.error}` : data.response,
         timestamp: new Date().toLocaleTimeString('en-US', { 
           hour: '2-digit', 
           minute: '2-digit',
@@ -75,7 +71,21 @@ export function AIInsights() {
         }),
       };
       setMessages(prev => [...prev, aiResponse]);
-    }, 1000);
+    } catch (error) {
+      const errorResponse: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: "Sorry, I couldn't connect to the FinSight Brain. Please make sure the backend server is running.",
+        timestamp: new Date().toLocaleTimeString('en-US', { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          hour12: true 
+        }),
+      };
+      setMessages(prev => [...prev, errorResponse]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   return (
@@ -127,6 +137,23 @@ export function AIInsights() {
                 )}
               </div>
             ))}
+            
+            {isTyping && (
+              <div className="flex gap-4 justify-start">
+                <div className="bg-[rgba(192,193,255,0.2)] border border-[rgba(192,193,255,0.3)] rounded-[12px] size-10 flex items-center justify-center shrink-0">
+                  <Sparkles className="size-5 text-[#c0c1ff] animate-pulse" />
+                </div>
+                <div className="max-w-[70%]">
+                  <div className="bg-[#201f22] border border-[rgba(70,69,84,0.3)] rounded-[8px] rounded-tl-none p-4">
+                    <div className="flex space-x-1.5">
+                      <div className="w-2 h-2 bg-[#c7c4d7] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <div className="w-2 h-2 bg-[#c7c4d7] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <div className="w-2 h-2 bg-[#c7c4d7] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Input Area */}

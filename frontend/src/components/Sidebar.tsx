@@ -3,10 +3,10 @@ import { Home, Activity, MessageSquare, Building2 } from 'lucide-react';
 
 export function Sidebar() {
   const navItems = [
-    { path: '/', icon: Home, label: 'Dashboard' },
-    { path: '/anomaly-monitor', icon: Activity, label: 'Anomaly Monitor' },
-    { path: '/ai-copilot', icon: MessageSquare, label: 'AI Copilot' },
-    { path: '/banks-overview', icon: Building2, label: 'Banks Overview' },
+    { path: '/dashboard', icon: Home, label: 'Dashboard' },
+    { path: '/dashboard/anomaly-monitor', icon: Activity, label: 'Anomaly Monitor' },
+    { path: '/dashboard/ai-copilot', icon: MessageSquare, label: 'AI Copilot' },
+    { path: '/dashboard/banks-overview', icon: Building2, label: 'Banks Overview' },
   ];
 
   return (
