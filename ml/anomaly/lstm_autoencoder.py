@@ -109,7 +109,7 @@ if __name__ == "__main__":
     df = build_anomaly_features(days=365)
     if not df.empty:
         # Chạy test với một mã VCB
-        detector = LSTMAnomalyDetector(seq_length=30, epochs=10)
+        detector = LSTMAnomalyDetector(seq_length=30, epochs=50)
         res_vcb = detector.fit_predict(df, 'VCB')
         
         anomalies = res_vcb[res_vcb['is_anomaly_lstm'] == True]

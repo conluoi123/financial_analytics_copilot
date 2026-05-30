@@ -5,7 +5,7 @@ env/
 __pycache__/
 *.pyc
 
-# Data & Databases (Bảo mật: Không bao giờ push data thực tế hay db lên Git)
+# Data & Databases (B?o m?t: Kh�ng bao gi? push data th?c t? hay db l�n Git)
 data/
 *.duckdb
 *.db
@@ -20,9 +20,24 @@ dbt_project/logs/
 .dagster/
 mlruns/
 
-# Frontend (Next.js)
+# Frontend (Next.js / Vite)
 frontend/node_modules/
 frontend/.next/
+frontend/dist/
+frontend/build/
+frontend/.cache/
+frontend/.vite/
+frontend/.turbo/
+frontend/.parcel-cache/
+frontend/coverage/
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
 
 # IDE & OS
 .vscode/

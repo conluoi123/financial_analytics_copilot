@@ -15,8 +15,9 @@ import duckdb
 import pandas as pd 
 from pathlib import Path 
 
-
-PATH = Path("data/finsight.duckdb")
+# Tính toán đường dẫn tuyệt đối đến thư mục gốc của project
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PATH = PROJECT_ROOT / "data" / "finsight.duckdb"
 
 FEATURES = [
     "pct_change_zscore", 
