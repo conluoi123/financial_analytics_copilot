@@ -2,6 +2,6 @@ finsight:
   target: dev
   outputs:
     dev:
-      type:     duckdb
-      path:     "../data/finsight.duckdb"
-      threads:  4
+      type: duckdb
+      path: "../data/finsight.duckdb"
+      threads: 4

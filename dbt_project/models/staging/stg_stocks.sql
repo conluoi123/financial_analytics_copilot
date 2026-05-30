@@ -1,9 +1,6 @@
--- Phần sql này có tác dụng 
--- 1. Lấy dữ liệu raw từ bronze layer 
--- 2. Ép kiểu dữ liệu chuẩn 
--- 3. Loại bỏ duplicate 
--- 4. Tạo dataset để đưa lên silver layer. 
-
+-- 1. Chuyển pivot từ nhiều dòng thành đúng 1 dòng 
+-- 2. Cast dữ liệu về dạng chuẩn 
+-- 3. loại duplicate 
 
 WITH source AS (
     SELECT * FROM {{ source('bronze', 'vn_stocks') }}

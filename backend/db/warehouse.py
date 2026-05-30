@@ -9,16 +9,16 @@ def get_connection() -> duckdb.DuckDBPyConnection:
 
 def init_warehouse():
     """
-    Tạo DuckDB views trỏ thẳng vào Delta tables ở Bronze.
-    dbt sẽ dùng các views này làm sources khi chạy models.
+    Tao DuckDB views tro thang vao Delta tables o Bronze.
+    dbt se dung cac views nay lam sources khi chay models.
     """
     con = get_connection()
 
-    # Cài và load extension delta để DuckDB đọc được format Delta Lake
+    # Cai va load extension delta de DuckDB doc duoc format Delta Lake
     con.execute("INSTALL delta; LOAD delta;")
 
-    # Tạo các Bronze views
-    # delta_scan() là hàm đặc biệt của DuckDB để quét thư mục Delta
+    # Tao cac Bronze views
+    # delta_scan() la ham dac biet cua DuckDB de quet thu muc Delta
     con.execute(f"""
         CREATE OR REPLACE VIEW vn_stocks AS
         SELECT * FROM delta_scan('{BRONZE_DIR}/vn_stocks')
@@ -33,7 +33,7 @@ def init_warehouse():
     """)
 
     con.close()
-    print("✅ DuckDB warehouse initialized — Bronze views ready for dbt")
+    print("[OK] DuckDB warehouse initialized -- Bronze views ready for dbt")
 
 if __name__ == "__main__":
     init_warehouse()
